@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+    mariadb :
+        image : mariadb:5
+        environment :
+            MYSQL_ROOT_PASSWORD : root
+            MYSQL_USER : bugs
+            MYSQL_PASSWORD : password
+            MYSQL_DATABASE : bugs
+        ports :
+            - "3306:3306"
+        volumes :
+            - ../volumes/mariadb:/var/lib/mysql
+
+
+    phpmyadmin :
+       image : phpmyadmin/phpmyadmin:4.6
+       links :
+         - mariadb:db
+       ports :
+         - "8080:80"
+
+    bugs :
+        build :
+            context : .
+            dockerfile : Dockerfile
+        container_name : bugs
+        ports :
+            - "80:80"
+        environment :
+            - APP_DB_HOST=mariadb
+            - APP_DB_NAME=bugs
+            - APP_DB_USER=bugs
+            - APP_DB_PASSWORD=password
+            - APP_TZ=Europe/Paris
+            - APP_SMTP_SENDER=your@mail.com
+            - APP_SMTP_EMAIL=your@mail.com
+            - APP_SMTP_PASSWORD=yourpass

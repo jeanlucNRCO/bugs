@@ -115,12 +115,12 @@
 					<div class="dropdown" style="z-index: 10000;">
 						<ul id="dropdown_ul">
 							<li class="unassigned" id="dropdown_li_0"><a href="javascript: Reassignment(<?php echo $project->id.','.((Project\Issue::current()->assigned_to == '') ? 0 : Project\Issue::current()->assigned_id).',0,'.Project\Issue::current()->id; ?>);" class="user0<?php echo !Project\Issue::current()->assigned_id ? ' assigned' : ''; ?>" ><?php echo __('tinyissue.no_one'); ?></a></li>
-							<?php 
+							<?php
 								foreach(Project::current()->users()->get() as $row) {
 									echo '<li id="dropdown_li_'.$row->id.'">';
 									echo ( $row->id == Project\Issue::current()->assigned->id) ? '<span style="color: #FFF; margin-left: 10px; font-weight: bold;">' : '<a href="javascript: Reassignment('.$project->id.','.((Project\Issue::current()->assigned_id == '') ? 0 : Project\Issue::current()->assigned_id).','.$row->id.','.Project\Issue::current()->id.');" class="user0'.((!Project\Issue::current()->assigned) ? ' assigned' : '').'" >';
-									echo $row->firstname . ' ' . $row->lastname; 
-									echo ( $row->id == Project\Issue::current()->assigned->id) ? '</span>' : '</a>'; 
+									echo $row->firstname . ' ' . $row->lastname;
+									echo ( $row->id == Project\Issue::current()->assigned->id) ? '</span>' : '</a>';
 									echo '</li>';
 								}
 							?>
@@ -144,18 +144,18 @@
 			<p>
 				<textarea name="comment" style="width: 98%; height: 90px;"></textarea>
 				<span style="text-align: left; width: 50%;">
-				<?php 
+				<?php
 					$percent = ((is_object($Etat)) ? (($Etat->weight == 100) ? 91 : $Etat->weight+1) : 10 );
-					if (Project\Issue::current()->assigned->id == \Auth::user()->id ) { 
+					if (Project\Issue::current()->assigned->id == \Auth::user()->id ) {
 						echo __('tinyissue.percentage_of_work_done').':';
 						echo '<input type="number" name="Pourcentage" value="'.$percent.'" min="'.$percent.'" max="100" /> %';
-					} else { 
-						echo '<br />'; 
+					} else {
+						echo '<br />';
 						echo __('tinyissue.percentage_of_work_done').':&nbsp;&nbsp;';
 						echo $percent;
 						echo '<input type="hidden" name="Pourcentage" value="'.$percent.'"  /> %';
-						echo '<br />'; 
-					} 
+						echo '<br />';
+					}
 				?>
 				</span>
 				<div style="text-align: right; width: 98%; margin-top: -25px;">
@@ -240,21 +240,21 @@ function AddTag (Quel,d) {
 		}
 	};
 	xhttpTAG.open("GET", NextPage, true);
-	xhttpTAG.send(); 
+	xhttpTAG.send();
 }
 
 function IMGupload(input) {
 	var IDcomment = 'comment' + new Date().getTime();
 	var fil = document.getElementById("file_upload").files[0];
 	var ext = fil['name'].substring(fil['name'].lastIndexOf('.') + 1).toLowerCase();
-	var img = "../../../../app/assets/images/icons/file_01.png?"; 
+	var img = "../../../../app/assets/images/icons/file_01.png?";
 	var xhttpCHK = new XMLHttpRequest();
 	var CheckPage = '<?php echo $_SERVER['REQUEST_URI']; ?>/checkExt?ext=' + ext;
 	xhttpCHK.onreadystatechange = function() {
 	   if (this.readyState == 4 && this.status == 200) {
 			var formdata = new FormData();
 			formdata.append("Loading", fil);
-			if (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg") { 
+			if (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg") {
 				img = "../../../../uploads/" + fil['name'];
 			} else if (xhttpCHK.responseText == 'yes' ) {
 				img = "../../../../app/assets/images/upload_type/" + ext + ".png";
@@ -264,7 +264,7 @@ function IMGupload(input) {
 			NextPage = NextPage + '&ext=' + ext;
 			NextPage = NextPage + '&fileName=' + fil['name'];
 			NextPage = NextPage + '&icone=' + img;
-		
+
 			xhttpUPLD.onreadystatechange = function() {
 			if (this.readyState == 3 ) {
 				document.getElementById('div_barupload').style.display = "block";
@@ -293,12 +293,12 @@ function IMGupload(input) {
 				}
 			};
 			xhttpUPLD.open("POST", NextPage, true);
-			xhttpUPLD.send(formdata); 
+			xhttpUPLD.send(formdata);
 			xhttpUPLD.upload.addEventListener("progress", IMGupload_progressHandler, false);
 		}
 	};
 	xhttpCHK.open("GET", CheckPage, true);
-	xhttpCHK.send(); 
+	xhttpCHK.send();
 }
 function IMGupload_progressHandler(event){
 	var percent = (event.total == 0) ? 1 : Math.round((event.loaded / event.total) * 100);
@@ -319,7 +319,7 @@ function OteTag(Quel) {
 	    }
 	};
 	xhttpDAG.open("GET", NextPage, true);
-	xhttpDAG.send(); 
+	xhttpDAG.send();
 }
 
 function Reassignment (Project, Prev, Suiv, Issue) {
@@ -337,7 +337,7 @@ function Reassignment (Project, Prev, Suiv, Issue) {
 				adLi.id = IDcomment;
 				document.getElementById('ul_IssueDiscussion').appendChild(adLi);
 				document.getElementById(IDcomment).innerHTML = xhttpASGMT.responseText;
-				
+
 				var MyDropDown = document.getElementById('dropdown_ul');
 				var items = MyDropDown.getElementsByTagName("li");
 				for (var i = 1; i < items.length; ++i) {
@@ -358,7 +358,7 @@ function Reassignment (Project, Prev, Suiv, Issue) {
 		}
 	};
 	xhttpASGMT.open("GET", NextPage, true);
-	xhttpASGMT.send(); 
+	xhttpASGMT.send();
 }
 
 
@@ -366,9 +366,9 @@ function Reassignment (Project, Prev, Suiv, Issue) {
 	$wysiwyg = Config::get('application.editor');
 	if (trim(@$wysiwyg['directory']) != '') {
 		if (file_exists($wysiwyg['directory']."/Bugs_code/showeditor.js")) {
-			include_once $wysiwyg['directory']."/Bugs_code/showeditor.js"; 
-		} 
-	} 
+			include_once $wysiwyg['directory']."/Bugs_code/showeditor.js";
+		}
+	}
 ?>
 	//setTimeout(function() { var debut = LitTags (); } , 497);
 </script>
